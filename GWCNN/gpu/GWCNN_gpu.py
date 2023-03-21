@@ -441,7 +441,8 @@ def training(nets,names ,n_grid=32, build_r=32., build_prefixs = [],dbloss=False
     
         if len(states) > 0:
             start_epoch = int(states[-1].split('/')[-1].split('.')[0].split('_')[-1])
-            net.module.load_state_dict(torch.load(states[-1]))
+            #net.module.load_state_dict(torch.load(states[-1]))
+            net.load_state_dict(torch.load(states[-1]))
         else:
             start_epoch = 0
         
