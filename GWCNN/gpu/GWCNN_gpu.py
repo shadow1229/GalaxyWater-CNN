@@ -429,6 +429,9 @@ def run_epoch(env, epoch, train=True,build=False, batchsize=4 ,dr=None):
 def training(nets,names ,n_grid=32, build_r=32., build_prefixs = [],dbloss=False,batchsize=4):
     for idx, net in enumerate(nets):
         name = names[idx]
+        curr_dir =  os.path.dirname(__file__)#new 
+        cwd = os.getcwd()  #new
+        os.chdir(curr_dir) #new
         if not os.access(name,0):
             os.mkdir(name)
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -445,7 +448,7 @@ def training(nets,names ,n_grid=32, build_r=32., build_prefixs = [],dbloss=False
             net.load_state_dict(torch.load(states[-1]))
         else:
             start_epoch = 0
-        
+        os.chdir(cwd) #new        
         optimizer = optim.Adam(net.parameters(), lr=0.0001)
         
         log = open('%s/cnn_net_v%d.log'%(name,idx),'a')
@@ -476,6 +479,9 @@ def training(nets,names ,n_grid=32, build_r=32., build_prefixs = [],dbloss=False
 def predict_path(nets,names,in_path,out_name,n_grid=64, padding=4.0, build_prefixs = [],dbloss=False,tlog=False):
     for idx, net in enumerate(nets):
         name = names[idx]
+        curr_dir =  os.path.dirname(__file__)#new 
+        cwd = os.getcwd()  #new
+        os.chdir(curr_dir) #new
         if not os.access(name,0):
             os.mkdir(name)
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -488,10 +494,10 @@ def predict_path(nets,names,in_path,out_name,n_grid=64, padding=4.0, build_prefi
     
         if len(states) > 0:
             start_epoch = int(states[-1].split('/')[-1].split('.')[0].split('_')[-1])
-            net.module.load_state_dict(torch.load(states[-1]))
+            net.load_state_dict(torch.load(states[-1]))
         else:
             start_epoch = 0
-        
+        os.chdir(cwd) #new        
         optimizer = optim.Adam(net.parameters(), lr=0.0001)
         pd = {}
         pd[out_name] = {'pro':[in_path] , 
@@ -504,6 +510,9 @@ def predict_path(nets,names,in_path,out_name,n_grid=64, padding=4.0, build_prefi
 def predict_path_cpu(nets,names,in_path,out_name,n_grid=64, padding=4.0, build_prefixs = [],dbloss=False,tlog=False,tlog_path='cpu_time.log'):
     for idx, net in enumerate(nets):
         name = names[idx]
+        curr_dir =  os.path.dirname(__file__)#new 
+        cwd = os.getcwd()  #new
+        os.chdir(curr_dir) #new
         if not os.access(name,0):
             os.mkdir(name)
         
@@ -515,7 +524,7 @@ def predict_path_cpu(nets,names,in_path,out_name,n_grid=64, padding=4.0, build_p
             net.load_state_dict(torch.load(states[-1],map_location='cpu'))
         else:
             start_epoch = 0
-        
+        os.chdir(cwd) #new        
         optimizer = optim.Adam(net.parameters(), lr=0.0001)
         pd = {}
         pd[out_name] = {'pro':[in_path] , 
